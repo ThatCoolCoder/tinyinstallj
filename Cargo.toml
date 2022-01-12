@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 bytes = "1.1.0"
-reqwest = { version = "0.11.9", features = ["json", "blocking"] }
+reqwest = { version = "0.11.9", features = ["blocking"] }
 nix = "0.23.1"
 
 [build-dependencies]
@@ -17,4 +17,6 @@ winres = "0.1.12"
 # strip = true  # Automatically strip symbols from the binary.
 opt-level = "z"  # Optimize for size.
 lto = true  # Enable link time optimization
-codegen-units = 1  # Reduce parallel code generation units
+# These two reduce executable size by about 1.5BMB but it's not really worth it for the slower build time
+# codegen-units = 1  # Reduce parallel code generation units
+# panic = "abort"

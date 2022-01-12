@@ -2,6 +2,8 @@ use std;
 
 use bytes::Bytes;
 
+#[path = "./utils.rs"]
+mod utils;
 #[path = "./config.rs"]
 mod config;
 
@@ -20,9 +22,9 @@ pub fn install_jar(jar_bytes: Bytes) -> Option<Vec<String>> {
     let runner_script_path = std::path::Path::new(binary_directory).join(runner_script_name.as_str())
         .into_os_string().into_string().unwrap();
     let runner_script_contents = match std::env::consts::OS {
-        "windows" => format!("java -jar {}", installed_jar_path),
+        "windows" => format!("java -jar \"{}\"", installed_jar_path),
         _ => format!("#!/bin/sh
-            java -jar {}", installed_jar_path)
+            java -jar \"{}\"", installed_jar_path)
     };
 
     match std::fs::write(&installed_jar_path, jar_bytes) {
@@ -54,6 +56,11 @@ pub fn install_jar(jar_bytes: Bytes) -> Option<Vec<String>> {
             },
             Err(_e) => return None
         };
+    }
+
+    // Add dir to path
+    if std::env::consts::OS == "windows" {
+        utils::append_to_path("\"C:\\Program Files\"");
     }
 
     return Some(vec![runner_script_path, installed_jar_path]);

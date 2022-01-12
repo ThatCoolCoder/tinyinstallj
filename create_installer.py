@@ -42,20 +42,17 @@ def build_installer(config: Config, debug: bool):
 
     # Rename output file
     if debug:
-        output_dir = 'target/debug'
+        output_dir = os.path.join('target', 'debug')
     else:
-        output_dir = 'target/release'
+        output_dir = os.path.join('target', 'release')
     os.chdir(output_dir)
 
     if os.path.exists('tinyinstallj'):
         output_name = f'{config.simple_program_name}-installer'
-        os.rename('tinyinstallj', output_name)
+        os.replace('tinyinstallj', output_name)
     elif os.path.exists('tinyinstallj.exe'):
         output_name = f'{config.simple_program_name}-installer.exe'
-        os.rename('tinyinstallj.exe', output_name)
-    
-    # Set permissions of the output file
-    # os.chmod(output_name, stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+        os.replace('tinyinstallj.exe', output_name)
 
     return os.path.join(output_dir, output_name)
 

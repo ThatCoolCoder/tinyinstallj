@@ -61,13 +61,13 @@ pub fn install() {
 
     println!("Installation complete.");
     println!("To uninstall {}, delete the following files:", config::FULL_PROGRAM_NAME);
-    println!(" - {}", written_files.join("\n - "))
+    println!(" - {}\n", written_files.join("\n - "));
+    utils::get_input("Press enter to exit");
 }
 
 fn on_user_not_admin() {
-    // todo: uncomment this for prod
-    // println!("You must be an administrator to run this installer.");
-    // cancel_installation();
+    println!("You must be an administrator to run this installer.");
+    cancel_installation();
 }
 
 fn show_introduction() {
