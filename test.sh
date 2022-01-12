@@ -1,0 +1,1 @@
+python3 create_installer.py && ./target/debug/tinyinstallj
