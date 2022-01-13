@@ -1,5 +1,6 @@
 import json
 import os
+import stat
 import argparse
 from dataclasses import dataclass
 
@@ -52,6 +53,9 @@ def build_installer(config: Config, debug: bool):
     elif os.path.exists('tinyinstallj.exe'):
         output_name = f'{config.simple_program_name}-installer.exe'
         os.rename('tinyinstallj.exe', output_name)
+    
+    # Set permissions of the output file
+    # os.chmod(output_name, stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
     return os.path.join(output_dir, output_name)
 

@@ -46,16 +46,16 @@ pub fn install() {
     };
     println!("Finished download\n");
 
-    // println!("Saving file to disk...");
-    // match get_jar::install_jar(bytes) {
-    //     true => println!("Installed .jar file\n"),
-    //     false => {
-    //         println!("Failed to install .jar file");
-    //         cancel_installation();
-    //     }
-    // }
+    println!("Saving file to disk...");
+    match install_jar::install_jar(bytes) {
+        true => println!("Installed .jar file\n"),
+        false => {
+            println!("Failed to install .jar file");
+            cancel_installation();
+        }
+    }
 
-    println!("That's the end of the installer. There's probably a .jar file in your downloads folder that you can run now.");
+    println!("Installation complete.");
 }
 
 fn on_user_not_admin() {

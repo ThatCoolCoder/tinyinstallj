@@ -1,1 +1,1 @@
-python3 create_installer.py -d && ./target/debug/tinyinstallj
+python3 create_installer.py -d && sudo ./target/debug/tinyinstallj-test-installer
