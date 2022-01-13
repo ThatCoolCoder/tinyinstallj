@@ -1,5 +1,3 @@
-use std::fs;
-
 use bytes::Bytes;
 use reqwest::blocking;
 
