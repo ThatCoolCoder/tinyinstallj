@@ -1,6 +1,7 @@
 pub mod check_is_admin;
 pub mod check_java_installation;
-pub mod get_jar;
+pub mod download_jar;
+pub mod install_jar;
 pub mod config;
 pub mod utils;
 
@@ -36,7 +37,7 @@ pub fn install() {
     }
 
     println!("Downloading {}...", config::JAR_FILE_URL);
-    let bytes = match get_jar::download_jar() {
+    let bytes = match download_jar::download_jar() {
         Some(bytes) => bytes,
         None => {
             cancel_installation();
@@ -45,14 +46,14 @@ pub fn install() {
     };
     println!("Finished download\n");
 
-    println!("Saving file to disk...");
-    match get_jar::save_jar(bytes) {
-        true => println!("Saved file\n"),
-        false => {
-            println!("Failed to save file (check permissions?)");
-            cancel_installation();
-        }
-    }
+    // println!("Saving file to disk...");
+    // match get_jar::install_jar(bytes) {
+    //     true => println!("Installed .jar file\n"),
+    //     false => {
+    //         println!("Failed to install .jar file");
+    //         cancel_installation();
+    //     }
+    // }
 
     println!("That's the end of the installer. There's probably a .jar file in your downloads folder that you can run now.");
 }

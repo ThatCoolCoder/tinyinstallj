@@ -18,7 +18,3 @@ pub fn download_jar() -> Option<Bytes>{
     };
     return Some(file_bytes)
 }
-
-pub fn save_jar(jar_bytes: Bytes) -> bool {
-    return fs::write(config::SIMPLE_PROGRAM_NAME.to_owned() + ".jar", jar_bytes).is_ok();
-}
