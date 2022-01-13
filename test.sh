@@ -1,1 +1,1 @@
-python3 create_installer.py && ./target/debug/tinyinstallj
+python3 create_installer.py -d && ./target/debug/tinyinstallj

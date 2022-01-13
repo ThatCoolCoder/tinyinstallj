@@ -7,7 +7,7 @@ use reqwest::blocking;
 mod config;
 
 pub fn download_jar() -> Option<Bytes>{
-    let result = reqwest::blocking::get(config::JAR_FILE_URL);
+    let result = blocking::get(config::JAR_FILE_URL);
     let response = match result {
         Ok(response) => response,
         Err(_e) => return None

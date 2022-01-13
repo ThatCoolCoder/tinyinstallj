@@ -29,7 +29,7 @@ pub fn get_java_path() -> Option<String> {
     return None;
 }
 
-pub fn java_version_sufficient(path: String) -> bool {
+pub fn java_version_sufficient(_path: String) -> bool {
     println!("Automated JRE version checking has not been implemented yet");
     return utils::ask_yn(format!("Does your computer have JRE version {} or greater installed?", config::MIN_JAVA_VERSION).as_str(), false)
 }

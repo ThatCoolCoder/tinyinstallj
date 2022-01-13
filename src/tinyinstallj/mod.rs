@@ -1,7 +1,4 @@
-use std::process;
-
-// use bytes::Bytes;
-
+pub mod check_is_admin;
 pub mod check_java_installation;
 pub mod get_jar;
 pub mod config;
@@ -10,6 +7,10 @@ pub mod utils;
 pub fn install() {
     show_introduction();
     println!("");
+
+    if ! check_is_admin::is_admin() {
+        on_user_not_admin();
+    }
 
     match utils::ask_yn("Do you want to proceed with installation?", false) {
         true => println!(""),
@@ -54,6 +55,12 @@ pub fn install() {
     }
 
     println!("That's the end of the installer. There's probably a .jar file in your downloads folder that you can run now.");
+}
+
+fn on_user_not_admin() {
+    // todo: uncomment this for prod
+    // println!("You must be an administrator to run this installer.");
+    // cancel_installation();
 }
 
 fn show_introduction() {
