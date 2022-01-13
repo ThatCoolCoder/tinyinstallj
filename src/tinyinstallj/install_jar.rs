@@ -5,9 +5,7 @@ use bytes::Bytes;
 #[path = "./config.rs"]
 mod config;
 
-use std::os::unix::fs::PermissionsExt;
-
-pub fn install_jar(jar_bytes: Bytes) -> bool {
+pub fn install_jar(jar_bytes: Bytes) -> Option<Vec<String>> {
     // Figure out some paths and file contents
     let binary_directory = match std::env::consts::OS {
         "windows" => "C:\\Program Files\\",
@@ -29,34 +27,34 @@ pub fn install_jar(jar_bytes: Bytes) -> bool {
 
     match std::fs::write(&installed_jar_path, jar_bytes) {
         Ok(_v) => (),
-        Err(_e) => return false
+        Err(_e) => return None
     }
 
     match std::fs::write(&runner_script_path, runner_script_contents) {
         Ok(_v) => (),
-        Err(_e) => return false
+        Err(_e) => return None
     }
 
     // Try chmoding
     if std::env::consts::OS != "windows" {
         match std::process::Command::new("chmod")
             .arg("+x")
-            .arg(runner_script_path)
+            .arg(&runner_script_path)
             .status() {
 
             Ok(status) => {
                 match status.code() {
                     Some(code) => {
                         if code > 0 {
-                            return false;
+                            return None;
                         }
                     }
-                    None => return false
+                    None => return None
                 }
             },
-            Err(_e) => return false
+            Err(_e) => return None
         };
     }
 
-    return true;
+    return Some(vec![runner_script_path, installed_jar_path]);
 }

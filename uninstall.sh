@@ -1,2 +1,4 @@
-sudo rm /usr/bin/tinyinstallj-test
-sudo rm /usr/bin/tinyinstallj-test.jar
+# uninstall the test files
+
+sudo rm /usr/bin/weather
+sudo rm /usr/bin/weather.jar

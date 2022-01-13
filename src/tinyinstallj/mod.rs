@@ -47,15 +47,21 @@ pub fn install() {
     println!("Finished download\n");
 
     println!("Saving file to disk...");
+    let mut written_files: Vec<String> = Vec::new();
     match install_jar::install_jar(bytes) {
-        true => println!("Installed .jar file\n"),
-        false => {
+        Some(value) => {
+            println!("Installed .jar file\n");
+            written_files = value;
+        },
+        None => {
             println!("Failed to install .jar file");
             cancel_installation();
         }
     }
 
     println!("Installation complete.");
+    println!("To uninstall {}, delete the following files:", config::FULL_PROGRAM_NAME);
+    println!(" - {}", written_files.join("\n - "))
 }
 
 fn on_user_not_admin() {

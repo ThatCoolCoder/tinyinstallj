@@ -1,6 +1,6 @@
 {
-    "full_program_name": "TinyInstallJ Test Program",
-    "simple_program_name": "tinyinstallj-test",
+    "full_program_name": "Weather by ThatCoolCoder",
+    "simple_program_name": "weather",
     "min_java_version": "17",
-    "jar_file_url" : "https://github.com/ThatCoolCoder/weather/releases/download/v1.1.0/weather-1.1.0.jar"
+    "jar_file_url" : "https://github.com/ThatCoolCoder/weather/releases/download/v1.1.1/weather-1.1.1.jar"
 }
