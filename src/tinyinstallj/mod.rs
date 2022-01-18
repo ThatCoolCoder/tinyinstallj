@@ -45,9 +45,13 @@ pub fn install() {
     };
 
     println!("Checking JRE version...");
-    match check_java_installation::java_version_sufficient(java_path) {
-        true => println!("Java version sufficient\n"),
-        false => on_insufficient_java()
+    let java_version = check_java_installation::get_java_version(java_path);
+    println!("Found Java {}", java_version);
+    if java_version >= config::MIN_JAVA_VERSION {
+        println!("Java version sufficient\n");
+    }
+    else {
+        on_insufficient_java();
     }
 
     println!("Downloading {}...", config::JAR_FILE_URL);
@@ -70,6 +74,7 @@ pub fn install() {
     println!("");
 
     println!("Installation complete.\n");
+    println!("Installed as \"{}\"", config::SIMPLE_PROGRAM_NAME);
     show_uninstall_instructions(&install_paths);
     println!("");
     if std::env::consts::OS == "windows" {

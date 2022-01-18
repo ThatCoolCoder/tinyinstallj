@@ -54,6 +54,7 @@ pub fn create_runner_script(install_paths: &InstallPaths) -> Result<(), String> 
 pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), String> {
     let mut uninstall_script_contents = match std::env::consts::OS {
         "windows" => "@ECHO OFF",
+        // On linux make sure that we are root
         _ => "#!/bin/sh
             if [ \"$UID\" != 0 ]
             then
