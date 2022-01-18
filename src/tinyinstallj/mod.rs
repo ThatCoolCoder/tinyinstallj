@@ -74,13 +74,13 @@ pub fn install() {
     println!("");
 
     println!("Installation complete.\n");
-    println!("Installed as \"{}\"", config::SIMPLE_PROGRAM_NAME);
-    show_uninstall_instructions(&install_paths);
-    println!("");
     if std::env::consts::OS == "windows" {
-        println!("You will need to sign out and sign back in for changes to take effect");
+        println!("You may need to sign out and sign back in for changes to take effect");
         println!("(This will be fixed in a later version of tinyinstallj)\n");
     }
+    println!("{} has been installed as \"{}\"", config::FULL_PROGRAM_NAME, config::SIMPLE_PROGRAM_NAME);
+    show_uninstall_instructions(&install_paths);
+    println!("");
     utils::get_input("Press enter to exit");
 }
 
