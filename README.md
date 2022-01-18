@@ -52,6 +52,7 @@ Then to generate an installer, run `python3 tinyinstallj/create_installer.py`. B
 
 - Add more customisability to installer experience
 - (maybe) more granularity about minimum Java version - currently only allows setting of major version
+- Potentially switch to a GUI with fltk or something
 
 ## Info for devs
 

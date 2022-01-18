@@ -1,5 +1,7 @@
 use std;
 
+use webbrowser;
+
 pub mod check_is_admin;
 pub mod check_java_installation;
 pub mod download;
@@ -10,7 +12,7 @@ pub mod get_install_paths;
 
 use get_install_paths::InstallPaths;
 
-pub fn install() {
+pub fn install(force_install: bool) {
     if ! check_is_admin::is_admin() {
         on_user_not_admin();
     }
@@ -31,27 +33,32 @@ pub fn install() {
             return;
         }
     };
-
-    println!("Searching for JRE...");
-    let java_path = match check_java_installation::get_java_path() {
-        Some(path) => {
-            println!("Found JRE: {}\n", path);
-            path
-        },
-        None => {
-            on_java_not_found();
-            return;
-        }
-    };
-
-    println!("Checking JRE version...");
-    let java_version = check_java_installation::get_java_version(java_path);
-    println!("Found Java {}", java_version);
-    if java_version >= config::MIN_JAVA_VERSION {
-        println!("Java version sufficient\n");
+    
+    if force_install {
+        println!("Skipping Java checks because installer was run with the -f flag\n")
     }
     else {
-        on_insufficient_java();
+        println!("Searching for JRE...");
+        let java_path = match check_java_installation::get_java_path() {
+            Some(path) => {
+                println!("Found JRE: {}\n", path);
+                path
+            },
+            None => {
+                on_general_java_issue();
+                return;
+            }
+        };
+
+        println!("Checking JRE version...");
+        let java_version = check_java_installation::get_java_version(java_path);
+        println!("Found Java {}", java_version);
+        if java_version >= config::MIN_JAVA_VERSION {
+            println!("Java version sufficient\n");
+        }
+        else {
+            on_general_java_issue();
+        }
     }
 
     println!("Downloading {}...", config::JAR_FILE_URL);
@@ -116,27 +123,19 @@ fn show_uninstall_instructions(install_paths: &InstallPaths) {
         "windows" => println!("To uninstall {}, run {}", config::FULL_PROGRAM_NAME, install_paths.uninstall_script.to_string_lossy()),
         _ => println!("To uninstall {}, run {} as root", config::FULL_PROGRAM_NAME, install_paths.uninstall_script.to_string_lossy())
     }
-    
-}
-
-fn on_java_not_found() {
-    println!("No Java installation was found on your system\n");
-    on_general_java_issue();
-}
-
-fn on_insufficient_java() {
-    println!("The Java version installed on your system is not sufficient\n");
-    on_general_java_issue();
 }
 
 fn on_general_java_issue() {
-    println!(concat!("It is recommended that you quit the installation and install a suitable Java version, ",
-        "but those who know what they're doing can opt to continue."));
-    let result = utils::ask_yn("Do you wish to quit?", true);
-    println!("");
-    if result {
-        cancel_installation();
+    println!("A suitable Java installation was not found on your system");
+    println!("This program requires a minimum Java version of {} to run", config::MIN_JAVA_VERSION);
+    println!("    (Those who know what they're doing can force install with the -f flag)");
+    if utils::ask_yn("Would you like this installer to direct you to download options for Java?", true) {
+        if ! webbrowser::open("https://docs.microsoft.com/en-us/java/openjdk/download").is_ok() {
+            println!("Failed to open web browser automatically, please navigate to https://docs.microsoft.com/en-us/java/openjdk/download");
+        }
     }
+    println!("");
+    cancel_installation();
 }
 
 fn on_failed_to_determine_path() {
