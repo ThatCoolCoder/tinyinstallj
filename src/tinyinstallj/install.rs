@@ -52,6 +52,9 @@ pub fn create_runner_script(install_paths: &InstallPaths) -> Result<(), String> 
 }
 
 pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), String> {
+    // Windows doesn't like a batch file deleting itself.
+    // (goto) 2>nul & del "%~f0" is a tricky way to get around this.
+
     let mut uninstall_script_contents = match std::env::consts::OS {
         "windows" => "@ECHO OFF",
         // On linux make sure that we are root
@@ -62,13 +65,21 @@ pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), Strin
                 exit
             fi"
     }.to_owned();
-    let paths = vec![&install_paths.runner_script, &install_paths.uninstall_script, &install_paths.jar];
+    let paths = match std::env::consts::OS {
+        "windows" => vec![&install_paths.runner_script, &install_paths.jar],
+        _ => vec![&install_paths.runner_script, &install_paths.jar, &install_paths.uninstall_script]
+    };
     for path in paths {
         uninstall_script_contents += match std::env::consts::OS {
             "windows" => format!("\r\ndel \"{}\"", path.to_string_lossy()),
             _ => format!("\nrm '{}'", path.to_string_lossy())
         }.as_str();
     }
+
+    if std::env::consts::OS == "windows" {
+        uninstall_script_contents += &("\n".to_owned() + "(goto) 2>nul & del \"%~f0\"");
+    }
+
     match std::fs::write(&install_paths.uninstall_script, uninstall_script_contents) {
         Ok(_v) => (),
         Err(_e) => return Err(format!("Failed to write {}", &install_paths.uninstall_script.to_string_lossy()))
