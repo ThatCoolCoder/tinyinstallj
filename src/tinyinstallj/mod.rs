@@ -11,12 +11,12 @@ pub mod get_install_paths;
 use get_install_paths::InstallPaths;
 
 pub fn install() {
-    show_introduction();
-    println!("");
-
     if ! check_is_admin::is_admin() {
         on_user_not_admin();
     }
+
+    show_introduction();
+    println!("");
 
     match utils::ask_yn("Do you want to proceed with installation?", false) {
         true => println!(""),

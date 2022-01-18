@@ -18,20 +18,22 @@ class Config:
     min_java_version: int
     jar_file_url: str
 
-def read_json_config():
-    with open(JSON_CONFIG_FILE, 'r') as f:
+def read_json_config(base_directory: str):
+    with open(os.path.join(base_directory, JSON_CONFIG_FILE), 'r') as f:
         file_content = f.read()
         config = Config.from_json(file_content)
         return config
 
-def create_rust_config(config: Config):
-    with open(RUST_CONFIG_IN_FILE, 'r') as f:
+def create_rust_config(config: Config, base_directory: str):
+    with open(os.path.join(base_directory, RUST_CONFIG_IN_FILE), 'r') as f:
         config_template = f.read()
     
-    with open(RUST_CONFIG_OUT_FILE, 'w+') as f:
+    with open(os.path.join(base_directory, RUST_CONFIG_OUT_FILE), 'w+') as f:
         f.write(config_template.format(config=config))
 
-def build_installer(config: Config, debug: bool):
+def build_installer(config: Config, debug: bool, base_directory: str):
+    os.chdir(base_directory)
+
     if debug:
         exit_status = os.system('cargo build')
     else:
@@ -45,6 +47,7 @@ def build_installer(config: Config, debug: bool):
         output_dir = os.path.join('target', 'debug')
     else:
         output_dir = os.path.join('target', 'release')
+    old_cwd = os.getcwd()
     os.chdir(output_dir)
 
     if os.path.exists('tinyinstallj'):
@@ -53,6 +56,7 @@ def build_installer(config: Config, debug: bool):
     elif os.path.exists('tinyinstallj.exe'):
         output_name = f'{config.simple_program_name}-installer.exe'
         os.replace('tinyinstallj.exe', output_name)
+    os.chdir(old_cwd)
 
     return os.path.join(output_dir, output_name)
 
@@ -68,10 +72,14 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--debug', help='Enable debug mode', action='store_true')
     args = parser.parse_args()
 
+    base_directory, _ = os.path.split(__file__)
+    old_cwd = os.getcwd()
+
     print(f'-- Reading config from {JSON_CONFIG_FILE}')
-    config = read_json_config()
+    config = read_json_config(base_directory)
     print(f'-- Writing config to {RUST_CONFIG_OUT_FILE}')
-    create_rust_config(config)
+    create_rust_config(config, base_directory)
     print(f'-- Building installer')
-    output_path = build_installer(config, args.debug)
+    output_path = build_installer(config, args.debug, base_directory)
+    output_path = os.path.relpath(os.path.abspath(output_path), old_cwd)
     print(f'-- Built installer to {output_path}')
