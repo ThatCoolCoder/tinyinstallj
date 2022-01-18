@@ -1,10 +1,8 @@
 use std::env;
 use std::path::Path;
 
-#[path = "./config.rs"]
-mod config;
-#[path = "./utils.rs"]
-mod utils;
+use super::config;
+use super::utils;
 
 pub fn get_java_path() -> Option<String> {
     let path_splitter = match env::consts::OS {

@@ -1,8 +1,16 @@
 use std;
 use std::io::{Write};
 
+// For some reason rust is not picking up that we import these in other files,
+// so stop it complaining
+// #[allow(dead_code)]
+
 pub fn ask_yn(prompt: &str, default_response: bool) -> bool {
-    let input = get_input(format!("{} (y/n) ", prompt).as_str());
+    let full_prompt = match default_response {
+        true => format!("{} (Y/n) ", prompt),
+        false => format!("{} (y/N) ", prompt)
+    };
+    let input = get_input(full_prompt.as_str());
     
     if input == "y" {
         return true;
@@ -22,17 +30,4 @@ pub fn get_input(prompt: &str) -> String {
     std::io::stdin().read_line(&mut line).expect("Error: Could not read a line");
     line = line.trim().to_string();
     return line;
-}
-
-pub fn append_to_path(new_path: &str) -> Result<(), std::env::JoinPathsError> {
-    if let Some(path) = std::env::var_os("PATH") {
-        let mut paths = std::env::split_paths(&path).collect::<Vec<_>>();
-        if ! paths.contains(&std::path::PathBuf::from(new_path)) {
-            paths.push(std::path::PathBuf::from(new_path));
-            let new_path = std::env::join_paths(paths)?;
-            std::env::set_var("PATH", &new_path);
-        }
-    }
-
-    Ok(())
 }

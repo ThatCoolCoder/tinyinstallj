@@ -1,6 +1,6 @@
 {
     "full_program_name": "Weather by ThatCoolCoder",
-    "simple_program_name": "weather",
+    "simple_program_name": "tccweather",
     "min_java_version": "17",
     "jar_file_url" : "https://github.com/ThatCoolCoder/weather/releases/download/v1.1.1/weather-1.1.1.jar"
 }
