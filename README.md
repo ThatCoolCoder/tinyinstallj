@@ -16,7 +16,7 @@ It's still under initial development and the first stable version is still some 
 
 ## Usage (planned usage)
 
-First, make sure you have Python >= 3.7, pip and a recent version of Rust + Cargo installed (say >= 1.50).
+First, make sure you have Python >= 3.7, pip and a recent version of Rust + Cargo installed (>= 1.56).
 
 Add this repository to your project as a submodule:
 ```
@@ -50,9 +50,7 @@ Then to generate an installer, run `python3 tinyinstallj/create_installer.py`. B
 #### Before 1st release:
 
 - Create .lnk files on windows
-- Put icon not in /usr/bin on linux
-- Delete icon in uninstaller (maybe just delete a dir containing things)
-- On Linux, detect if it's being run not in a terminal and open it in a terminal
+- On Linux, detect if it's being run not in a terminal and open it in a terminal (just needs debugging)
 - On Linux, make pin to taskbar work - currently pins java installation which is not right
 
 #### Further in future:

@@ -1,8 +1,6 @@
 use bytes::Bytes;
 use reqwest::blocking;
 
-use super::config;
-
 pub fn download_file(file_url: String) -> Result<Bytes, String> {
     let error_message = format!("Failed to download {}", file_url);
     let result = blocking::get(file_url);

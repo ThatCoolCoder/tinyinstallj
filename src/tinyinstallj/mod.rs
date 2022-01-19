@@ -4,6 +4,9 @@ use std::path::PathBuf;
 use webbrowser;
 use bytes::Bytes;
 
+#[cfg(target_family = "unix")]
+use isatty;
+
 pub mod check_is_admin;
 pub mod check_java_installation;
 pub mod download;
@@ -15,6 +18,7 @@ pub mod get_install_paths;
 use get_install_paths::InstallPaths;
 
 pub fn install(force_install: bool) {
+    check_is_in_terminal();
     if ! check_is_admin::is_admin() {
         on_user_not_admin();
     }
@@ -127,6 +131,82 @@ fn on_user_not_admin() {
         _ => println!("This installer must be run as root")
     }
     cancel_installation();
+}
+
+
+#[cfg(target_family = "unix")]
+fn check_is_in_terminal() {
+    // If we're not being run in a tty (ex someone just double-clicked the program),
+    // then fight to end up running in a terminal.
+    // First tries launching a bunch of terminals and if none works tries to make a popup
+    // on the user's desktop
+
+    if ! isatty::stdout_isatty() {
+        let executable_path = match std::env::current_exe() {
+            Ok(v) => v,
+            Err(_e) => {
+                ask_user_to_run_in_terminal();
+                return
+            }
+        }.to_string_lossy().to_string();
+        
+
+
+        // List of terminal emulators with best higher and most reliable lower.
+        // It would be great to support gnome-terminal but it gives errors about
+        // dbus not setting up correctly.
+        // Weirdly, my system shows me any of these four randomly, so it's not hugely reliable
+
+        // Get issues about using a temporary value when declaring this var inline the hashmap below,
+        // so move it out
+        let with_quotes = format!("sudo {}", executable_path);
+        let terminal_emulators = std::collections::HashMap::from([
+            ("konsole", vec!["-e", "sudo", &executable_path]),
+            ("alacritty", vec!["-e", "sudo", &executable_path]),
+            ("xfce4-terminal", vec!["-e",
+                &with_quotes]),
+            ("xterm", vec!["-e", "sudo", &executable_path])
+        ]);
+
+        for (emulator_name, args) in terminal_emulators {
+            if utils::get_program_path(&emulator_name.to_owned()).is_some() {
+                if std::process::Command::new(emulator_name)
+                    .args(args)
+                    .spawn()
+                    .is_ok() {
+                    
+                    // If the terminal is totally successful, exit this and let it run
+                    std::process::exit(0);
+                }
+                // Break if we found a terminal.
+                // The terminal might not have worked but it's better to create no terminals
+                // and use a fallback popup rather than create none
+                break;
+            }
+        }
+
+        // If none of those terminals worked, then give up and ask the user to do it
+        ask_user_to_run_in_terminal();
+    }
+}
+
+#[cfg(target_family = "unix")]
+fn ask_user_to_run_in_terminal() {
+    match std::process::Command::new("notify-send")
+        .arg("-t")
+        .arg("0")
+        .arg(format!("Error installing {}", config::FULL_PROGRAM_NAME))
+        .arg("This installer must be run in a terminal as root")
+        .spawn() {
+        Ok(_v) => (),
+        Err(_e) => eprintln!("aaaahahdadflf")
+    }
+    std::process::exit(1);
+}
+
+#[cfg(target_family = "windows")]
+fn check_is_in_terminal() {
+    // Do nothing - rust programs open in CMD in windows by default
 }
 
 fn show_introduction() {

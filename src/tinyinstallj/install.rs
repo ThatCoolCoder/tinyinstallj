@@ -1,7 +1,6 @@
 use std;
 use std::path::PathBuf;
 
-use bytes::Bytes;
 // use lnk::ShellLink;
 
 #[cfg(target_family = "windows")]
@@ -20,13 +19,6 @@ pub fn setup_install_dir(install_paths: &InstallPaths) -> Result<(), String> {
         Ok(_v) => Ok(()),
         Err(e) => Err(e)
     }
-}
-
-pub fn save_jar(install_paths: &InstallPaths, jar_bytes: Bytes) -> Result<(), String> {
-    return match std::fs::write(&install_paths.jar, jar_bytes) {
-        Ok(_v) => Ok(()),
-        Err(_e) => Err(format!("Failed to write {}", &install_paths.jar.to_string_lossy()))
-    };
 }
 
 pub fn create_runner_script(install_paths: &InstallPaths) -> Result<(), String> {
