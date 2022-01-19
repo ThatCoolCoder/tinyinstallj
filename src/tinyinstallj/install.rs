@@ -66,10 +66,10 @@ pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), Strin
                 exit
             fi"
     }.to_owned();
-    let paths = match std::env::consts::OS {
-        "windows" => vec![&install_paths.runner_script, &install_paths.jar],
-        _ => vec![&install_paths.runner_script, &install_paths.jar, &install_paths.uninstall_script]
-    };
+    let mut paths = vec![&install_paths.runner_script, &install_paths.jar, &install_paths.icon];
+    if std::env::consts::OS != "windows" {
+        paths.push(&install_paths.uninstall_script);
+    }
     for path in paths {
         uninstall_script_contents += match std::env::consts::OS {
             "windows" => format!("\r\ndel \"{}\"", path.to_string_lossy()),
@@ -106,11 +106,11 @@ pub fn create_desktop_link(install_paths: &InstallPaths) -> Result<(), String> {
         Version=1.0
         Type=Application
         Terminal={is_console_app}
-        Exec={runner_script_path}
+        Exec=java -jar {jar_path}
         Name={full_program_name}
         Icon={icon_path}",
         is_console_app = config::IS_CONSOLE_APP,
-        runner_script_path = install_paths.runner_script.to_string_lossy(),
+        jar_path = install_paths.jar.to_string_lossy(),
         icon_path = install_paths.icon.to_string_lossy(),
         full_program_name = config::FULL_PROGRAM_NAME);
 

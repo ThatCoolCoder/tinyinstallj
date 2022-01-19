@@ -14,8 +14,10 @@ pub struct InstallPaths {
 }
 
 pub fn get_install_paths() -> Option<InstallPaths> {
-    let base_dir = match std::env::consts::OS {
-        "windows" => {
+    let is_windows: bool = std::env::consts::OS == "windows";
+
+    let base_dir = match is_windows {
+        true => {
             match dirs::home_dir() {
                 Some(v) => v.join("tinyinstallj-programs"),
                 None => return None
@@ -23,22 +25,26 @@ pub fn get_install_paths() -> Option<InstallPaths> {
         }
         _ => Path::new("/usr/bin/").to_path_buf()
     };
-    let runner_script_name = match std::env::consts::OS {
-        "windows" => config::SIMPLE_PROGRAM_NAME.to_owned() + ".bat",
+    let runner_script_name = match is_windows {
+        true => config::SIMPLE_PROGRAM_NAME.to_owned() + ".bat",
         _ => config::SIMPLE_PROGRAM_NAME.to_string()
     };
-    let uninstall_script_name = match std::env::consts::OS {
-        "windows" => format!("{}-uninstall.bat", config::SIMPLE_PROGRAM_NAME),
+    let uninstall_script_name = match is_windows {
+        true => format!("{}-uninstall.bat", config::SIMPLE_PROGRAM_NAME),
         _ => format!("{}-uninstall", config::SIMPLE_PROGRAM_NAME)
     };
 
     let jar_path = Path::new(&base_dir).join(config::SIMPLE_PROGRAM_NAME.to_owned() + ".jar");
-    let icon_path = Path::new(&base_dir).join(config::SIMPLE_PROGRAM_NAME.to_owned() +
-        config::ICON_FILE_EXTENSION);
+    let icon_path = match is_windows {
+        true => Path::new(&base_dir).join(config::SIMPLE_PROGRAM_NAME.to_owned() +
+        config::ICON_FILE_EXTENSION),
+        _ => Path::new("/usr/share/icons/").join(config::SIMPLE_PROGRAM_NAME.to_owned() +
+        config::ICON_FILE_EXTENSION)
+    };
     let runner_script_path = Path::new(&base_dir).join(runner_script_name.as_str());
     let uninstall_script_path = Path::new(&base_dir).join(uninstall_script_name.as_str());
-    let desktop_link_path = match std::env::consts::OS {
-        "windows" => Path::new(&base_dir).join(config::SIMPLE_PROGRAM_NAME.to_owned() + ".lnk"),
+    let desktop_link_path = match is_windows {
+        true => Path::new(&base_dir).join(config::SIMPLE_PROGRAM_NAME.to_owned() + ".lnk"),
         _ => Path::new("/usr/share/applications").join(config::SIMPLE_PROGRAM_NAME.to_owned() + ".desktop")
     };
 
