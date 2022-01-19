@@ -1,6 +1,8 @@
 use std;
+use std::path::PathBuf;
 
 use webbrowser;
+use bytes::Bytes;
 
 pub mod check_is_admin;
 pub mod check_java_installation;
@@ -62,17 +64,14 @@ pub fn install(force_install: bool) {
     }
 
     println!("Downloading {}...", config::JAR_FILE_URL);
-    let jar_bytes = match download::download_jar() {
-        Some(bytes) => bytes,
-        None => {
-            cancel_installation();
-            return;
-        }
-    };
-    println!("Finished download\n");
+    let jar_bytes = download_with_error_handling(config::JAR_FILE_URL.to_owned()).unwrap();
+    println!("Downloading {}...", config::ICON_URL);
+    let icon_bytes = download_with_error_handling(config::ICON_URL.to_owned()).unwrap();
+    println!("Finished downloads\n");
 
     output_result("Setting up installation directory...", install::setup_install_dir(&install_paths));
-    output_result("Saving jar file...", install::save_jar(&install_paths, jar_bytes));
+    output_result("Saving jar file...", save_with_error_handling(&install_paths.jar, jar_bytes));
+    output_result("Saving icon...", save_with_error_handling(&install_paths.icon, icon_bytes));
     output_result("Creating runner script...", install::create_runner_script(&install_paths));
     output_result("Creating uninstaller...", install::create_uninstall_script(&install_paths));
     if ! config::IS_CONSOLE_APP {
@@ -101,6 +100,24 @@ fn output_result(task_description: &str, result: Result<(), String>) {
             println!("{}\n", e);
             cancel_installation();
         }
+    }
+}
+
+fn download_with_error_handling(file_url: String) -> Option<Bytes> {
+    return match download::download_file(file_url) {
+        Ok(bytes) => Some(bytes),
+        Err(e) => {
+            println!("{}", e);
+            cancel_installation();
+            return None;
+        }
+    };
+}
+
+fn save_with_error_handling(file_path: &PathBuf, bytes: Bytes) -> Result<(), String> {
+    return match std::fs::write(file_path, &bytes) {
+        Ok(v) => Ok(v),
+        Err(_e) => Err(format!("Failed to write {}", file_path.to_string_lossy()))
     }
 }
 

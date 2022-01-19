@@ -18,6 +18,8 @@ class Config:
     is_console_app: bool
     min_java_version: int
     jar_file_url: str
+    icon_url: str
+    icon_file_extension: str
 
 def read_json_config(base_directory: str):
     with open(os.path.join(base_directory, JSON_CONFIG_FILE), 'r') as f:

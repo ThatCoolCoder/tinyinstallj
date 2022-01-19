@@ -33,10 +33,12 @@ Create a configuration file `tinyinstallj.json` in the root directory of your pr
 ```
 {
     "full_program_name": "Weather by ThatCoolCoder",
-    "is_console_app": false,
     "simple_program_name": "tccweather",
+    "is_console_app": false,
     "min_java_version": "17",
-    "jar_file_url": "https://github.com/ThatCoolCoder/weather/releases/download/v1.1.1/weather-1.1.1.jar"
+    "jar_file_url": "https://github.com/ThatCoolCoder/weather/releases/download/v1.1.1/weather-1.1.1.jar",
+    "icon_url": "https://raw.githubusercontent.com/ThatCoolCoder/weather/main/src/main/resources/icon.png",
+    "icon_file_extension": ".png"
 }
 ```
 This example is for a standard/point release scheme, but it could easily be adapted to a rolling release.
@@ -47,9 +49,11 @@ Then to generate an installer, run `python3 tinyinstallj/create_installer.py`. B
 
 #### Before 1st release:
 
-- Create .desktop files on Linux and .lnk files on windows
-- Include icon in installation
+- Create .lnk files on windows
+- Put icon not in /usr/bin on linux
+- Delete icon in uninstaller (maybe just delete a dir containing things)
 - On Linux, detect if it's being run not in a terminal and open it in a terminal
+- On Linux, make pin to taskbar work - currently pins java installation which is not right
 
 #### Further in future:
 

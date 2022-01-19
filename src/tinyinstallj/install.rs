@@ -108,9 +108,10 @@ pub fn create_desktop_link(install_paths: &InstallPaths) -> Result<(), String> {
         Terminal={is_console_app}
         Exec={runner_script_path}
         Name={full_program_name}
-        Icon={runner_script_path}",
+        Icon={icon_path}",
         is_console_app = config::IS_CONSOLE_APP,
         runner_script_path = install_paths.runner_script.to_string_lossy(),
+        icon_path = install_paths.icon.to_string_lossy(),
         full_program_name = config::FULL_PROGRAM_NAME);
 
     match std::fs::write(&install_paths.desktop_link, content) {
