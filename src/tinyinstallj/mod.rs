@@ -75,8 +75,8 @@ pub fn install(force_install: bool) {
     output_result("Saving jar file...", install::save_jar(&install_paths, jar_bytes));
     output_result("Creating runner script...", install::create_runner_script(&install_paths));
     output_result("Creating uninstaller...", install::create_uninstall_script(&install_paths));
-    if utils::ask_yn("Do you want to create a desktop shortcut?", true) {
-        output_result("Creating desktop shortcut...", install::create_desktop_link(&install_paths));
+    if ! config::IS_CONSOLE_APP {
+        output_result("Creating application shortcut...", install::create_desktop_link(&install_paths));
     }
     println!("");
 

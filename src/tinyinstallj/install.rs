@@ -7,6 +7,7 @@ use bytes::Bytes;
 #[cfg(target_family = "windows")]
 use winreg::RegKey;
 
+use super::config;
 use super::get_install_paths::InstallPaths;
 
 pub fn setup_install_dir(install_paths: &InstallPaths) -> Result<(), String> {
@@ -95,8 +96,34 @@ pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), Strin
     return Ok(()); 
 }
 
+#[cfg(target_family = "unix")]
+pub fn create_desktop_link(install_paths: &InstallPaths) -> Result<(), String> {
+    // With Rust 1.58 formatting can be done better & more easily,
+    // but I want to support older versions
+    let content = format!("
+        [Desktop Entry]
+        Encoding=UTF-8
+        Version=1.0
+        Type=Application
+        Terminal={is_console_app}
+        Exec={runner_script_path}
+        Name={full_program_name}
+        Icon={runner_script_path}",
+        is_console_app = config::IS_CONSOLE_APP,
+        runner_script_path = install_paths.runner_script.to_string_lossy(),
+        full_program_name = config::FULL_PROGRAM_NAME);
+
+    match std::fs::write(&install_paths.desktop_link, content) {
+        Ok(_v) => (),
+        Err(_e) => return Err(format!("Failed to write {}", &install_paths.desktop_link.to_string_lossy()))
+    };
+    return Ok(());
+}
+
+#[cfg(target_family = "windows")]
 pub fn create_desktop_link(_install_paths: &InstallPaths) -> Result<(), String> {
-    return Err("This doesn't do anything yet".to_string());
+    println!("Creating links isn't supported on windows yet");
+    return Ok(());
 }
 
 fn set_executable_bit(path: &PathBuf) -> Result<(), String> {

@@ -17,7 +17,7 @@ webbrowser = "0.5.5"
 winreg = "0.7"
 
 [build-dependencies]
-winres = "0.1.12"
+# winres = "0.1.12"
 
 [profile.release]
 # strip = true  # Automatically strip symbols from the binary.

@@ -15,6 +15,7 @@ RUST_CONFIG_OUT_FILE = 'src/tinyinstallj/config.rs'
 class Config:
     full_program_name: str # Full name of the program, used for display. EG David's Fantastic Frobnicator
     simple_program_name: str # Name of the program without any spaces or punctuation, used for filenames. EG davids_fantastic_frobnicator
+    is_console_app: bool
     min_java_version: int
     jar_file_url: str
 
@@ -29,7 +30,12 @@ def create_rust_config(config: Config, base_directory: str):
         config_template = f.read()
     
     with open(os.path.join(base_directory, RUST_CONFIG_OUT_FILE), 'w+') as f:
-        f.write(config_template.format(config=config))
+        # Have to pass is_console_app separately as python auto bool-to-string
+        # results in first letter capitalized, which breaks rust.
+        # Because python doesn't support complex expressions in f-strings,
+        # we therefore have to do the conversion here.
+        f.write(config_template.format(config=config,
+            is_console_app=str(config.is_console_app).lower()))
 
 def build_installer(config: Config, debug: bool, base_directory: str):
     os.chdir(base_directory)

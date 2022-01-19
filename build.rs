@@ -1,4 +1,4 @@
-extern crate winres;
+// extern crate winres;
 
 fn main() {
     // Admin priveliges requesting:
