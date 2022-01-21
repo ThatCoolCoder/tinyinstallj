@@ -12,7 +12,7 @@ When running an installer, it also creates a batch/shell script to uninstall the
 
 ## This program is not ready for production yet
 
-It's still under initial development and the first stable version is still some way off. 
+It's still under initial development.
 
 ## Usage (planned)
 
@@ -56,10 +56,6 @@ A JSON file containing information about your program. All of the fields below a
 - `icon_url` (string). URL of the icon of your program. **This icon must be a .ico or it will not display on Windows**.
 
 ## Roadmap
-
-#### Before 1st release:
-
-- On Linux, make pin to taskbar work - currently pins java installation which is not right
 
 #### Further in future:
 

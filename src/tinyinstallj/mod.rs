@@ -7,13 +7,13 @@ use bytes::Bytes;
 #[cfg(target_family = "unix")]
 use isatty;
 
-pub mod check_is_admin;
-pub mod check_java_installation;
-pub mod download;
-pub mod install;
-pub mod config;
-pub mod utils;
-pub mod get_install_paths;
+mod check_is_admin;
+mod check_java_installation;
+mod download;
+mod install;
+mod config;
+mod utils;
+mod get_install_paths;
 
 use get_install_paths::InstallPaths;
 

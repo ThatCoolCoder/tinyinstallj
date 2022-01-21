@@ -1,9 +1,14 @@
 use std;
-use std::io::Write;
 use std::path::PathBuf;
 
 #[cfg(target_family = "windows")]
 use winreg::RegKey;
+
+// These imports are only used in builds for some platforms so allow them to be unused
+#[allow(unused_imports)]
+use super::config;
+#[allow(unused_imports)]
+use std::io::Write;
 
 use super::get_install_paths::InstallPaths;
 
@@ -49,12 +54,20 @@ pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), Strin
     let mut uninstall_script_contents = match std::env::consts::OS {
         "windows" => "@ECHO OFF",
         // On linux make sure that we are root
-        _ => "#!/bin/sh
-            if [ \"$UID\" != 0 ]
+        _ => r#"#!/bin/sh
+            if [ "$UID" != 0 ]
             then
-                echo 'You must be root to run this script'
+                echo "You must be root to run this script"
                 exit
-            fi"
+            fi
+            read -p "Are you sure you want to run this uninstaller? " -n 1 -r
+            echo ""
+            if [[ ! $REPLY =~ ^[y]$ ]]
+            then
+                echo "Cancelled"
+                exit
+            fi
+            "#
     }.to_owned();
     let mut paths = vec![&install_paths.runner_script, &install_paths.jar, &install_paths.icon];
     if std::env::consts::OS != "windows" {
@@ -70,6 +83,8 @@ pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), Strin
     if std::env::consts::OS == "windows" {
         uninstall_script_contents += &("\n".to_owned() + "(goto) 2>nul & del \"%~f0\"");
     }
+
+    uninstall_script_contents += "\n echo 'Finished uninstallation'";
 
     match std::fs::write(&install_paths.uninstall_script, uninstall_script_contents) {
         Ok(_v) => (),
