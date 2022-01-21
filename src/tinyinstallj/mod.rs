@@ -67,8 +67,8 @@ pub fn install(force_install: bool) {
         }
     }
 
-    println!("Downloading {}...", config::JAR_FILE_URL);
-    let jar_bytes = download_with_error_handling(config::JAR_FILE_URL.to_owned()).unwrap();
+    println!("Downloading {}...", config::JAR_URL);
+    let jar_bytes = download_with_error_handling(config::JAR_URL.to_owned()).unwrap();
     println!("Downloading {}...", config::ICON_URL);
     let icon_bytes = download_with_error_handling(config::ICON_URL.to_owned()).unwrap();
     println!("Finished downloads\n");
@@ -79,7 +79,7 @@ pub fn install(force_install: bool) {
     output_result("Creating runner script...", install::create_runner_script(&install_paths));
     output_result("Creating uninstaller...", install::create_uninstall_script(&install_paths));
     if ! config::IS_CONSOLE_APP {
-        output_result("Creating application shortcut...", install::create_desktop_link(&install_paths));
+        output_result("Creating application shortcut...", install::create_app_link(&install_paths));
     }
     println!("");
 

@@ -2,8 +2,7 @@
     "full_program_name": "Weather by ThatCoolCoder",
     "simple_program_name": "tccweather",
     "is_console_app": false,
-    "min_java_version": "17",
-    "jar_file_url": "https://github.com/ThatCoolCoder/weather/releases/download/v1.1.1/weather-1.1.1.jar",
-    "icon_url": "https://raw.githubusercontent.com/ThatCoolCoder/weather/main/src/main/resources/icon.png",
-    "icon_file_extension": ".png"
+    "min_java_version": 17,
+    "jar_url": "https://github.com/ThatCoolCoder/weather/releases/download/v1.1.1/weather-1.1.1.jar",
+    "icon_url": "https://raw.githubusercontent.com/ThatCoolCoder/weather/main/src/main/resources/icon.ico"
 }
