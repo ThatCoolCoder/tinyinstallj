@@ -63,6 +63,7 @@ A JSON file containing information about your program. All of the fields below a
 
 #### Further in future:
 
+- Windows: Robustness if `C:\Windows\System32\WindowsPowershell\v1.0\powershell.exe` doesn't exist
 - On Windows, find how to update the PATH without rebooting, or at least only tell people that they need to reboot when PATH was changed (which only occurs on the first installation of a tinyinstallj program)
 - Option to add shortcut to desktop
 - On Windows, better uninstaller integration with desktop

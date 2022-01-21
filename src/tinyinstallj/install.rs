@@ -1,7 +1,6 @@
 use std;
+use std::io::Write;
 use std::path::PathBuf;
-
-use powershell_script;
 
 #[cfg(target_family = "windows")]
 use winreg::RegKey;
@@ -115,7 +114,7 @@ pub fn create_app_link(install_paths: &InstallPaths) -> Result<(), String> {
 #[cfg(target_family = "windows")]
 pub fn create_app_link(install_paths: &InstallPaths) -> Result<(), String> {
     // I tried to use the lnk crate to do this but it turned out to be simpler to just
-    // bodge a powershell script as the create doesn't support saving yet.
+    // bodge a powershell script as the crate doesn't support saving yet.
     let script = format!(r#"
         $WshShell = New-Object -comObject WScript.Shell
         $Shortcut = $WshShell.CreateShortcut("{shortcut_location}")
@@ -127,10 +126,20 @@ pub fn create_app_link(install_paths: &InstallPaths) -> Result<(), String> {
         icon_location = &install_paths.icon.to_string_lossy(),
         jar_location = &install_paths.jar.to_string_lossy()
     );
-    return match powershell_script::run(&script, false) {
-        Ok(_v) => Ok(()),
-        Err(_e) => Err("Failed to create application shortcut".to_owned())
+    let mut process = match std::process::Command::new(r#"C:\Windows\System32\WindowsPowershell\v1.0\powershell.exe"#)
+        .args(&["-Command", "-"])
+        .stdin(std::process::Stdio::piped())
+        .spawn() {
+        Ok(v) => v,
+        Err(_e) => return Err("Failed to create application link: failed to start powershell".to_string())
     };
+    let child_stdin = process.stdin.as_mut().unwrap();
+    match child_stdin.write_all(script.as_bytes()) {
+        Ok(_v) => (),
+        Err(_e) => return Err("Failed to create application link: failed to pass arguments to powershell".to_string())
+    };
+    drop(child_stdin);
+    return Ok(());
 }
 
 fn set_executable_bit(path: &PathBuf) -> Result<(), String> {
