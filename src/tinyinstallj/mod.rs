@@ -231,7 +231,6 @@ fn on_general_java_issue() {
             println!("Failed to open web browser automatically, please navigate to https://docs.microsoft.com/en-us/java/openjdk/download");
         }
     }
-    println!("");
     cancel_installation();
 }
 
