@@ -69,7 +69,7 @@ pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), Strin
             fi
             "#
     }.to_owned();
-    let mut paths = vec![&install_paths.runner_script, &install_paths.jar, &install_paths.icon];
+    let mut paths = vec![&install_paths.runner_script, &install_paths.jar, &install_paths.icon, &install_paths.app_link];
     if std::env::consts::OS != "windows" {
         paths.push(&install_paths.uninstall_script);
     }
