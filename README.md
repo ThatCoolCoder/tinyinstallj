@@ -10,19 +10,15 @@ The `.jar` file is not embedded in the installer, the installer instead is only 
 
 When running an installer, it also creates a batch/shell script to uninstall the program.
 
-## This program is not ready for production yet
-
-It's still under initial development.
-
-## Usage (planned)
+## Usage
 
 First, make sure you have Python >= 3.7, pip and a recent version of Rust + Cargo installed (>= 1.56).
 
 Add this repository to your project as a submodule:
 ```
-git submodule add xxx (todo: figure out url & release scheme)
+git submodule add -b v1 https://github.com/ThatCoolCoder/tinyinstallj
 ```
-It's recommended you read a bit about git submodules if you haven't already. When git pulling and cloning, you will need to use the `--recurse-submodules` flag to ensure you actually get the submodule.
+tiyinstallj uses a rolling release - stable branches are of the form vN. It's recommended you read a bit about git submodules if you haven't already. When git pulling and cloning, you will need to use the `--recurse-submodules` flag to ensure you actually get the submodule.
 
 Install required Python packages for the installer to run:
 ```
@@ -41,12 +37,11 @@ Create a configuration file `tinyinstallj.json` in the root directory of your pr
 }
 ```
 
-
 Then to generate an installer, run `python3 tinyinstallj/create_installer.py`. By default this builds an optimized production build. Call with the `-d` flag to build a debug build, which takes less time. The target platform for an installer will be the same as the one generating the installer; i.e if you use a Windows machine to generate an installer, you will get a Windows executable. Cross compilation might be possible in the future, this depends if Rust/Cargo supports it.
 
 #### tinyinstallj.json
 
-A JSON file containing information about your program. All of the fields below are required; the installer generator will break if you miss some. The requirements for the fields below are not actually enforced by the generator, but **putting invalid values will prevent your installer from running correctly on some or all systems.**
+A JSON file containing information about your program. All of the fields below are required; the installer generator will break if you miss some. The requirements for the fields below are not actually enforced by the generator, but **putting invalid values will prevent your installer from installing correctly on some or all systems.**
 
 - `full_program_name` (string). Name of your program as displayed to users. Can contain letters, numbers, spaces + `()-_=+`.
 - `simple_program_name` (string). How your program is run from the command line. Can contain letters, numbers + `-_`.
@@ -57,12 +52,12 @@ A JSON file containing information about your program. All of the fields below a
 
 ## Roadmap
 
-#### Further in future:
+#### No set date:
 
 - Windows: Robustness if `C:\Windows\System32\WindowsPowershell\v1.0\powershell.exe` doesn't exist
-- On Windows, find how to update the PATH without rebooting, or at least only tell people that they need to reboot when PATH was changed (which only occurs on the first installation of a tinyinstallj program)
+- Windows: find how to update the PATH without rebooting, or at least only tell people that they need to reboot when PATH was changed (which only occurs on the first installation of a tinyinstallj program)
 - Option to add shortcut to desktop
-- On Windows, better uninstaller integration with desktop
+- Windows: better uninstaller integration with desktop
 - Proper support for OSX instead of just trying to use the Linux installer
 - Add more customisability to installer experience
 - Potentially add more granularity about minimum Java version - currently only allows setting of major version.
@@ -71,6 +66,10 @@ A JSON file containing information about your program. All of the fields below a
 ## Info for devs
 
 This section is not complete and will be extended later.
+
+#### Release scheme of tinyinstallj
+
+tinyinstallj uses a rolling release scheme. The `main` branch is for dev stuff and the branches of the form `vN` are for stable, production releases. Only increment the branch number when non-backwards compatible changes are made (equivalent of a major in semantic versioning) - minor and patch releases should use the same branch.
 
 #### How values are passed to the installer
 
