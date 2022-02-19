@@ -58,6 +58,7 @@ A JSON file containing information about your program. All of the fields below a
 - Windows: find how to update the PATH without rebooting, or at least only tell people that they need to reboot when PATH was changed (which only occurs on the first installation of a tinyinstallj program)
 - Option to add shortcut to desktop
 - Windows: better uninstaller integration with desktop
+- Option overrrides in `tinyinstallj.json` for different platforms.
 - Proper support for OSX instead of just trying to use the Linux installer
 - Add more customisability to installer experience
 - Potentially add more granularity about minimum Java version - currently only allows setting of major version.
