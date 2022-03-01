@@ -9,7 +9,6 @@ use isatty;
 
 mod check_is_admin;
 mod check_java_installation;
-mod download;
 mod install;
 mod config;
 mod utils;
@@ -67,12 +66,6 @@ pub fn install(force_install: bool) {
         }
     }
 
-    // println!("Downloading {}...", config::JAR_URL);
-    // let jar_bytes = download_with_error_handling(config::JAR_URL.to_owned()).unwrap();
-    // println!("Downloading {}...", config::ICON_URL);
-    // let icon_bytes = download_with_error_handling(config::ICON_URL.to_owned()).unwrap();
-    // println!("Finished downloads\n");
-
     output_result("Setting up installation directory...", install::setup_install_dir(&install_paths));
     output_result("Saving jar file...", save_with_error_handling(&install_paths.jar, config::JAR_BYTES));
     output_result("Saving icon...", save_with_error_handling(&install_paths.icon, config::ICON_BYTES));
@@ -105,17 +98,6 @@ fn output_result(task_description: &str, result: Result<(), String>) {
             cancel_installation();
         }
     }
-}
-
-fn download_with_error_handling(file_url: String) -> Option<Bytes> {
-    return match download::download_file(file_url) {
-        Ok(bytes) => Some(bytes),
-        Err(e) => {
-            println!("{}", e);
-            cancel_installation();
-            return None;
-        }
-    };
 }
 
 fn save_with_error_handling(file_path: &PathBuf, bytes: Bytes) -> Result<(), String> {

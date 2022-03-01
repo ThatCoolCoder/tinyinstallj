@@ -1,12 +1,12 @@
 # tinyinstallj
 
-A tiny installer generator for Java programs, primarily designed for use on GUI programs. It can work with command line programs but things can get a bit weird on some OS configurations.
+A tiny installer generator for Java programs, primarily designed for use on GUI programs. It can work with command line programs but things might get a bit weird on some OS configurations.
 
-The installer generator is written in Python and it builds a statically linked standalone Rust executable.
+The installer generator is written in Python and it builds a statically linked standalone Rust executable that should run pretty much anywhere.
 
 The generated executables are generally under 10MB in size. It can produce installers for Windows and Linux, and the Linux installers probably work on Mac.
 
-The `.jar` file is not embedded in the installer, the installer instead is only provided with the URL of a jar file to download and install. (This is true in the stable version, in the dev version this has been changed to include the `.jar` in the installer)
+The `.jar` file (and your program's icon) are embedded in the proguced executable.
 
 When running an installer, it also creates a batch/shell script to uninstall the program.
 
@@ -25,15 +25,15 @@ Install required Python packages for the installer to run:
 python3 -m pip install -r tinyinstallj/requirements.txt
 ```
 
-Create a configuration file `tinyinstallj.json` in the root directory of your project. Below is an example of `tinyinstallj.json` from one of my other projects. **Note that there are quite specific requirements for each field so please read the subsection [tinyinstallj.json](#tinyinstallj.json) for details.**
+Create a configuration file `tinyinstallj.json` in the root directory of your project. Below is an example of `tinyinstallj.json` from one of my other projects. **Read [tinyinstallj.json](#tinyinstallj.json) for details on valid values for the fields.**
 ```
 {
     "full_program_name": "Weather by ThatCoolCoder",
     "simple_program_name": "tccweather",
     "is_console_app": false,
     "min_java_version": 17,
-    "jar_url": "https://github.com/ThatCoolCoder/weather/releases/download/v1.1.1/weather-1.1.1`.jar`",
-    "icon_url": "https://raw.githubusercontent.com/ThatCoolCoder/weather/main/src/main/resources/icon.ico",
+    "jar_path": "target/weather-1.1.1-with-dependencies.jar",
+    "icon_path": "src/main/resources/icon.ico"
 }
 ```
 
@@ -41,20 +41,20 @@ Then to generate an installer, run `python3 tinyinstallj/create_installer.py`. B
 
 #### tinyinstallj.json
 
-A JSON file containing information about your program. All of the fields below are required; the installer generator will break if you miss some. The requirements for the fields below are not actually enforced by the generator, but **putting invalid values will prevent your installer from installing correctly on some or all systems.**
+A JSON file containing information about your program. Some fields are optional. The requirements for the fields below are not actually enforced by the generator, but **putting invalid values will prevent your installer from installing correctly on some or all systems.**
 
 - `full_program_name` (string). Name of your program as displayed to users. Can contain letters, numbers, spaces + `()-_=+`.
 - `simple_program_name` (string). How your program is run from the command line. Can contain letters, numbers + `-_`.
-- `is_console_app` (bool). Doesn't actually do much. I think it provides a value to the Linux desktop file generator. Just set it to false.
-- `min_java_version` (int). Minimum major version of Java required for your program to run. For newer versions of Java (>= SE 9), this corresponds to the major version number (eg **17**.0.1). For older versions, this corresponds to the minor version number (eg 1.**7**.5). The Java release numbering is annoyingly inconsistent.
-- `jar_url` (string). URL of the `.jar` file to download when installing your app. For a point release scheme, you can attach the `.jar` as an asset to a Github release or whatever than then you can modify this template `https://github.com/{user}/{repo}/releases/download/{tag}/{program}.jar`. For a rolling release, you could do something like `https://github.com/{user}/{repo}/blob/{distribution_branch}/program.jar`.
-- `icon_url` (string). URL of the icon of your program. **This icon must be a .ico or it will not display on Windows**.
+- `jar_path` (string). Path (relative to `tinyinstall.json`) of your `.jar` file. This file should contain bundle all of the dependencies needed instead of 
+- `icon_path` (string). Path to an icon file for your program to use on the desktop etc. **This icon must be a .ico or it will not display on Windows**.
+- `is_console_app` (bool, optional, defaults to false). Doesn't actually do much. I think it provides a value to the Linux desktop file generator. Just set it to false.
+- `min_java_version` (int, optional, defaults to 17). Minimum major version of Java required for your program to run. For newer versions of Java (>= SE 9), this corresponds to the major version number (eg **17**.0.1). For older versions, this corresponds to the minor version number (eg 1.**7**.5). The Java release numbering is annoyingly inconsistent.
 
 ## Roadmap
 
 #### No set date:
 
-- Windows: Robustness if `C:\Windows\System32\WindowsPowershell\v1.0\powershell.exe` doesn't exist
+- Windows: Robustness if `C:\Windows\System32\WindowsPowershell\v1.0\powershell.exe` doesn't exist.
 - Windows: find how to update the PATH without rebooting, or at least only tell people that they need to reboot when PATH was changed (which only occurs on the first installation of a tinyinstallj program)
 - Option to add shortcut to desktop
 - Windows: better uninstaller integration with desktop

@@ -7,7 +7,6 @@ edition = "2021"
 
 [dependencies]
 bytes = "1.1.0"
-reqwest = { version = "0.11.9", features = ["blocking"] }
 nix = "0.23.1"
 dirs = "4.0.0"
 webbrowser = "0.5.5"
