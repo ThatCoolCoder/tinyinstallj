@@ -17,13 +17,15 @@ class Config:
     simple_program_name: str # Name of the program without any spaces or punctuation, used for filenames. EG davids_fantastic_frobnicator
     is_console_app: bool
     min_java_version: int
-    jar_url: str
-    icon_url: str
+    jar_path: str
+    icon_path: str
 
 def read_json_config(base_directory: str):
     with open(os.path.join(base_directory, JSON_CONFIG_FILE), 'r') as f:
         file_content = f.read()
         config = Config.from_json(file_content)
+        config.jar_path = os.path.relpath(config.jar_path, os.path.dirname(RUST_CONFIG_IN_FILE)).replace('\\', '\\\\')
+        config.icon_path = os.path.relpath(config.icon_path, os.path.dirname(RUST_CONFIG_IN_FILE)).replace('\\', '\\\\')
         return config
 
 def create_rust_config(config: Config, base_directory: str):

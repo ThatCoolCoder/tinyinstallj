@@ -6,7 +6,7 @@ The installer generator is written in Python and it builds a statically linked s
 
 The generated executables are generally under 10MB in size. It can produce installers for Windows and Linux, and the Linux installers probably work on Mac.
 
-The `.jar` file is not embedded in the installer, the installer instead is only provided with the URL of a jar file to download and install.
+The `.jar` file is not embedded in the installer, the installer instead is only provided with the URL of a jar file to download and install. (This is true in the stable version, in the dev version this has been changed to include the `.jar` in the installer)
 
 When running an installer, it also creates a batch/shell script to uninstall the program.
 
