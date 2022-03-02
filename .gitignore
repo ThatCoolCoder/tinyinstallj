@@ -1,4 +1,4 @@
-src/config.rs
+src/tinyinstallj/config.rs
 
 /target
 Cargo.lock
