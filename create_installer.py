@@ -20,8 +20,8 @@ class Config:
     is_console_app: bool = False
     min_java_version: int = 17
 
-def read_json_config(base_directory: str):
-    with open(os.path.join(base_directory, JSON_CONFIG_FILE), 'r') as f:
+def read_json_config():
+    with open(JSON_CONFIG_FILE, 'r') as f:
         file_content = f.read()
         config = Config.from_json(file_content)
         config.jar_path = os.path.relpath(config.jar_path, os.path.dirname(RUST_CONFIG_IN_FILE)).replace('\\', '\\\\')
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     old_cwd = os.getcwd()
 
     print(f'-- Reading config from {JSON_CONFIG_FILE}')
-    config = read_json_config(base_directory)
+    config = read_json_config()
     print(f'-- Writing config to {RUST_CONFIG_OUT_FILE}')
     create_rust_config(config, base_directory)
     print(f'-- Building installer')
