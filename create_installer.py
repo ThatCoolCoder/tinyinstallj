@@ -24,8 +24,12 @@ def read_json_config():
     with open(JSON_CONFIG_FILE, 'r') as f:
         file_content = f.read()
         config = Config.from_json(file_content)
-        config.jar_path = os.path.relpath(config.jar_path, os.path.dirname(RUST_CONFIG_IN_FILE)).replace('\\', '\\\\')
-        config.icon_path = os.path.relpath(config.icon_path, os.path.dirname(RUST_CONFIG_IN_FILE)).replace('\\', '\\\\')
+        config.jar_path = os.path.relpath(
+            os.path.relpath(config.jar_path, os.path.dirname(__file__)),
+            os.path.dirname(RUST_CONFIG_IN_FILE)).replace('\\', '\\\\')
+        config.icon_path = os.path.relpath(
+            os.path.relpath(config.icon_path, os.path.dirname(__file__)),
+            os.path.dirname(RUST_CONFIG_IN_FILE)).replace('\\', '\\\\')
         return config
 
 def create_rust_config(config: Config, base_directory: str):
