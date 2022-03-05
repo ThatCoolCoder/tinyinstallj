@@ -25,7 +25,7 @@ Install required Python packages for the installer to run:
 python3 -m pip install -r tinyinstallj/requirements.txt
 ```
 
-Create a configuration file `tinyinstallj.json` in the root directory of your project. Below is an example of `tinyinstallj.json` from one of my other projects. **Read [tinyinstallj.json](#tinyinstallj.json) for details on valid values for the fields.**
+Create a configuration file `tinyinstallj.json` in the root directory of your project. Below is an example of `tinyinstallj.json` from one of my other projects. **Read the section below titled [tinyinstallj.json](#tinyinstallj.json) for details on valid values for the fields.**
 ```
 {
     "full_program_name": "Weather by ThatCoolCoder",
