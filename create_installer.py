@@ -16,9 +16,9 @@ class Config:
     # see README.md for information about these fields
     full_program_name: str 
     simple_program_name: str
-    welcome_text: str = ""
     jar_path: str
     icon_path: str
+    welcome_text: str = ""
     is_console_app: bool = False
     min_java_version: int = 17
 

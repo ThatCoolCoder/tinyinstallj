@@ -51,6 +51,7 @@ A JSON file containing information about your program. Some fields are optional.
 - `icon_path` (string). Path to an icon file for your program to use on the desktop etc. **This icon must be a .ico or it will not display on Windows**.
 - `is_console_app` (bool, optional, defaults to false). Doesn't actually do much. I think it provides a value to the Linux desktop file generator. Just set it to false.
 - `min_java_version` (int, optional, defaults to 17). Minimum major version of Java required for your program to run. For newer versions of Java (>= SE 9), this corresponds to the major version number (eg **17**.0.1). For older versions, this corresponds to the minor version number (eg 1.**7**.5). The Java release numbering is annoyingly inconsistent.
+- `welcome_text` (string, optional). Text printed at start of installer. Use it to describe your app or say thank you. If not defined or an empty string, no welcome text will be printed.
 
 ## Roadmap
 

@@ -4,7 +4,7 @@ use bytes::Bytes;
 
 pub const FULL_PROGRAM_NAME: &str = "{config.full_program_name}";
 pub const SIMPLE_PROGRAM_NAME: &str = "{config.simple_program_name}";
-pub const WELCOME_TEXT: &str = "{config.WELCOME_TEXT}";
+pub const WELCOME_TEXT: &str = "{config.welcome_text}";
 pub const IS_CONSOLE_APP: bool = {is_console_app};
 pub const MIN_JAVA_VERSION: i32 = {config.min_java_version};
 pub const JAR_BYTES: Bytes = Bytes::from_static(include_bytes!("{config.jar_path}"));
