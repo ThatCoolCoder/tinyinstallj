@@ -13,8 +13,10 @@ RUST_CONFIG_OUT_FILE = 'src/tinyinstallj/config.rs'
 @dataclass_json
 @dataclass
 class Config:
-    full_program_name: str # Full name of the program, used for display. EG David's Fantastic Frobnicator
-    simple_program_name: str # Name of the program without any spaces or punctuation, used for filenames. EG davids_fantastic_frobnicator
+    # see README.md for information about these fields
+    full_program_name: str 
+    simple_program_name: str
+    welcome_text: str = ""
     jar_path: str
     icon_path: str
     is_console_app: bool = False

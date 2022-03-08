@@ -77,7 +77,7 @@ tinyinstallj uses a rolling release scheme. The `main` branch is for dev stuff a
 
 #### How values are passed to the installer
 
-To pass the values of program name, `.jar` file url, etc to the executable, they're read from `tinyinstallj.json` and inserted into the template `config.rs.in` which is then saved to `config.rs`. This is the main purpose of `create_installer.py`. The rest of `create_installer.py` is just building the project and naming it suitably.
+To pass the values of program name, `.jar` file content, etc to the executable, they're read from `tinyinstallj.json` and inserted into the template `config.rs.in` which is then saved to `config.rs`. This is the main purpose of `create_installer.py`. The rest of `create_installer.py` is just building the project and naming it suitably.
 
 #### How the installed app is run
 

@@ -7,7 +7,7 @@ fn main() {
     let mut force_install = false;
     if args.len() > 1 && args[1] == "-f" {
         force_install = true;
-        println!("forcing!");
+        println!("Forcing install");
     }
     tinyinstallj::install(force_install);
 }

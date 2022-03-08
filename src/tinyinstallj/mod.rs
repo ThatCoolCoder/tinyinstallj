@@ -194,6 +194,9 @@ fn check_is_in_terminal() {
 fn show_introduction() {
     println!("\n\nWelcome to the installer for {}", config::FULL_PROGRAM_NAME);
     println!("(Created with tinyinstallj - https://github.com/ThatCoolCoder/tinyinstallj)\n");
+    if config::WELCOME_TEXT.len() > 0 {
+        println!("{}\n", config::WELCOME_TEXT);
+    }
     println!("For those unfamiliar with using terminal-based programs, you enter values by typing something in and pressing enter/return");
 }
 
