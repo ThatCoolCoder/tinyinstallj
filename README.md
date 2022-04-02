@@ -4,7 +4,7 @@ A tiny installer generator for Java programs, primarily designed for use on GUI 
 
 The installer generator is written in Python and it builds a statically linked standalone Rust executable that should run pretty much anywhere.
 
-The generated executables are generally under 10MB in size. It can produce installers for Windows and Linux. It can probably also generate installers for Mac, but these are simply recompilations of the Linux ones and might not have full system integration (someone buy me a mac so I can test it!).
+The generated executables are generally under 10MB in size. It can produce installers for Windows and Linux. It can probably also generate installers for Mac, but these are simply recompilations of the Linux ones and might not have full system integration (it would be great if someone with a mac could test this!).
 
 The `.jar` file (and your program's icon) are embedded in the produced executable.
 
@@ -39,7 +39,7 @@ Create a configuration file `tinyinstallj.json` in the root directory of your pr
 
 Then to generate an installer, run `python3 tinyinstallj/create_installer.py`. By default this builds an optimized production build. Call with the `-d` flag to build a debug build, which takes less time. The target platform for an installer will be the same as the one generating the installer; i.e if you use a Windows machine to generate an installer, you will get a Windows executable.
 
-Cross compilation is possible but difficult and it's probably just easier to get a VM. First install your target platform using the instructions from [https://rust-lang.github.io/rustup/cross-compilation.html](https://rust-lang.github.io/rustup/cross-compilation.html). You'll need to have a C toolchain set up to compile to that platform too. If you manage to get that working then you can call `python target/create_installer.py -p <your platform>`. Call `create_installer.py` with the `-h` flag to see a list of supported platforms
+Cross compilation is possible but not easy. First install your target platform using the instructions from [https://rust-lang.github.io/rustup/cross-compilation.html](https://rust-lang.github.io/rustup/cross-compilation.html). You'll need to have a C toolchain set up to compile to that platform too. If you manage to get that working then you can call `python tinyinstallj/create_installer.py -t <platform you just installed>`.
 
 #### tinyinstallj.json
 
