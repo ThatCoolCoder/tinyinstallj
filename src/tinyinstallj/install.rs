@@ -27,9 +27,13 @@ pub fn setup_install_dir(install_paths: &InstallPaths) -> Result<(), String> {
 pub fn create_runner_script(install_paths: &InstallPaths) -> Result<(), String> {
     let runner_script_contents = match std::env::consts::OS {
         "windows" => format!("@ECHO OFF
-            START /B javaw -jar \"{}\"", &install_paths.jar.to_string_lossy()),
+            START /B javaw {jvm_arguments} -jar \"{jar_path}\"",
+            jvm_arguments=config::JVM_ARGUMENTS,
+            jar_path=&install_paths.jar.to_string_lossy()),
         _ => format!("#!/bin/sh
-            java -jar \"{}\"", &install_paths.jar.to_string_lossy())
+            java {jvm_arguments} -jar \"{jar_path}\"",
+            jvm_arguments=config::JVM_ARGUMENTS,
+            jar_path=&install_paths.jar.to_string_lossy())
     };
 
     match std::fs::write(&install_paths.runner_script, runner_script_contents) {
@@ -111,13 +115,14 @@ pub fn create_app_link(install_paths: &InstallPaths) -> Result<(), String> {
         Version=1.0
         Type=Application
         Terminal={is_console_app}
-        Exec=java -jar {jar_path}
+        Exec=java {jvm_arguments} -jar {jar_path}
         Name={full_program_name}
         Icon={icon_path}",
         is_console_app = config::IS_CONSOLE_APP,
         jar_path = install_paths.jar.to_string_lossy(),
         icon_path = install_paths.icon.to_string_lossy(),
-        full_program_name = config::FULL_PROGRAM_NAME);
+        full_program_name = config::FULL_PROGRAM_NAME,
+        jvm_arguments = config::JVM_ARGUMENTS);
 
     match std::fs::write(&install_paths.app_link, content) {
         Ok(_v) => (),

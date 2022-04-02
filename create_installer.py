@@ -15,12 +15,14 @@ RUST_CONFIG_OUT_FILE = 'src/tinyinstallj/config.rs'
 class Config:
     # see README.md for information about these fields
     full_program_name: str 
-    simple_program_name: str
-    jar_path: str
     icon_path: str
-    welcome_text: str = ""
+    jar_path: str
+    simple_program_name: str
+
     is_console_app: bool = False
+    jvm_arguments: str = ""
     min_java_version: int = 17
+    welcome_text: str = ""
 
 def read_json_config():
     with open(JSON_CONFIG_FILE, 'r') as f:
@@ -58,6 +60,9 @@ def build_installer(config: Config, base_directory: str, debug: bool = False, ta
     if exit_status:
         print('Failed building executable.')
         rust_diagnostics()
+
+    if debug:
+        output_dir = os.path.join('target', 'debug')
     else:
         output_dir = os.path.join('target', 'release')
     old_cwd = os.getcwd()
