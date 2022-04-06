@@ -9,6 +9,7 @@ from dataclasses_json import dataclass_json
 DEFAULT_JSON_CONFIG_FILE = 'tinyinstallj.json'
 RUST_CONFIG_IN_FILE = 'src/tinyinstallj/config.rs.in'
 RUST_CONFIG_OUT_FILE = 'src/tinyinstallj/config.rs'
+RUST_KEYBOARD_INTERRUPT_ERROR_CODE = 2
 
 @dataclass_json
 @dataclass
@@ -57,7 +58,11 @@ def build_installer(config: Config, base_directory: str, debug: bool = False, ta
     if target is not None:
         command += f' --target={target}'
     exit_status = os.system(command)
-    if exit_status:
+
+    if exit_status == RUST_KEYBOARD_INTERRUPT_ERROR_CODE:
+        print('\n-- Build cancelled')
+        quit()
+    elif exit_status > 0:
         print('Failed building executable.')
         rust_diagnostics()
 
