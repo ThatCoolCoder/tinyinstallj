@@ -45,13 +45,13 @@ Cross compilation is possible but not easy. First install your target platform u
 A JSON file containing information about your program. Some fields are optional.
 
 - `full_program_name` (string). Name of your program as displayed to users. Can contain letters, numbers, spaces + `()-_=+`.
-- `icon_path` (string). Path to an icon file for your program to use on the desktop etc. **This icon must be a .ico or it will not display on Windows**.
+- `icon_path` (string). Path (relative to `tinyinstallj.json`) to an icon file for your program to use on the desktop etc. **This icon must be a .ico or it will not display on Windows**.
 - `is_console_app` (bool, optional, defaults to false). Doesn't actually do much. I think it provides a value to the Linux desktop file generator. Just set it to false.
 - `jar_path` (string). Path (relative to `tinyinstall.json`) of your `.jar` file.
 - `jvm_arguments` (string, optional). Arguments to pass to java virtual machine
 - `min_java_version` (int, optional, defaults to 17). Minimum major version of Java required for your program to run. For newer versions of Java (>= SE 9), this corresponds to the major version number (eg **17**.0.1). For older versions, this corresponds to the minor version number (eg 1.**7**.5). The Java release numbering is annoyingly inconsistent.
 - `simple_program_name` (string). How your program is run from the command line. Can contain letters, numbers + `-_`.
-- `welcome_text` (string, optional). Text printed at start of installer. Use it to describe your app or say thank you. If not defined or an empty string, no welcome text will be printed.
+- `welcome_text` (string, optional). Text printed at start of installer. Use it to describe your app or say thank you. If not defined or is an empty string, no welcome text will be printed.
 
 ## Roadmap
 
