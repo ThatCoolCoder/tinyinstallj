@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from dataclasses_json import dataclass_json
 
-JSON_CONFIG_FILE = 'tinyinstallj.json'
+DEFAULT_JSON_CONFIG_FILE = 'tinyinstallj.json'
 RUST_CONFIG_IN_FILE = 'src/tinyinstallj/config.rs.in'
 RUST_CONFIG_OUT_FILE = 'src/tinyinstallj/config.rs'
 
@@ -24,8 +24,8 @@ class Config:
     min_java_version: int = 17
     welcome_text: str = ""
 
-def read_json_config():
-    with open(JSON_CONFIG_FILE, 'r') as f:
+def read_json_config(config_file_path: str = DEFAULT_JSON_CONFIG_FILE):
+    with open(config_file_path, 'r') as f:
         file_content = f.read()
         config = Config.from_json(file_content)
         config.jar_path = os.path.relpath(
@@ -88,13 +88,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create an installer for a Java program')
     parser.add_argument('-d', '--debug', help='Enable debug mode', action='store_true')
     parser.add_argument('-t', '--target', help='Cross-compilation target', action='store', default=None)
+    parser.add_argument('-c', '--config_path', help='Specify a custom configuration file path',
+        action='store', default=DEFAULT_JSON_CONFIG_FILE)
     args = parser.parse_args()
 
     base_directory, _ = os.path.split(__file__)
     old_cwd = os.getcwd()
 
-    print(f'-- Reading config from {JSON_CONFIG_FILE}')
-    config = read_json_config()
+    print(f'-- Reading config from {args.config_path}')
+    config = read_json_config(args.config_path)
     print(f'-- Writing config to {RUST_CONFIG_OUT_FILE}')
     create_rust_config(config, base_directory)
     print(f'-- Building installer')
