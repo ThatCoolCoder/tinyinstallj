@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 
 use dirs;
-use platform_dirs::AppDirs;
+use platform_dirs::{AppDirs, UserDirs};
 
 use super::config;
 
@@ -10,6 +10,7 @@ pub struct InstallPaths {
     pub runner_script: PathBuf,
     pub uninstall_script: PathBuf,
     pub app_link: PathBuf,
+    pub desktop_link: PathBuf,
     pub jar: PathBuf,
     pub icon: PathBuf
 }
@@ -17,6 +18,7 @@ pub struct InstallPaths {
 pub fn get_install_paths() -> Option<InstallPaths> {
     let is_windows: bool = std::env::consts::OS == "windows";
     let app_dirs = AppDirs::new(None, true).unwrap();
+    let user_dirs = UserDirs::new().unwrap();
 
     let base_dir = match is_windows {
         true => {
@@ -41,6 +43,10 @@ pub fn get_install_paths() -> Option<InstallPaths> {
         true => Path::new(&base_dir).join(config::SIMPLE_PROGRAM_NAME.to_owned() + ".ico"),
         _ => Path::new("/usr/share/icons/").join(config::SIMPLE_PROGRAM_NAME.to_owned() + ".ico")
     };
+    let desktop_link_path = user_dirs.desktop_dir.join(match is_windows {
+        true => config::SIMPLE_PROGRAM_NAME.to_owned() + ".lnk",
+        false => config::SIMPLE_PROGRAM_NAME.to_owned() + ".desktop"
+    });
     let runner_script_path = Path::new(&base_dir).join(runner_script_name.as_str());
     let uninstall_script_path = Path::new(&base_dir).join(uninstall_script_name.as_str());
     let app_link_path = match is_windows {
@@ -55,6 +61,7 @@ pub fn get_install_paths() -> Option<InstallPaths> {
         runner_script: runner_script_path,
         uninstall_script: uninstall_script_path,
         app_link: app_link_path,
+        desktop_link: desktop_link_path,
         jar: jar_path,
         icon: icon_path,
     });

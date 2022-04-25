@@ -2,6 +2,7 @@
 
 use bytes::Bytes;
 
+pub const CREATE_DESKTOP_SHORTCUT: bool = {create_desktop_shortcut};
 pub const FULL_PROGRAM_NAME: &str = "{config.full_program_name}";
 pub const IS_CONSOLE_APP: bool = {is_console_app};
 pub const ICON_BYTES: Bytes = Bytes::from_static(include_bytes!("{config.icon_path}"));

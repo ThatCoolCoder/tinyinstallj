@@ -21,6 +21,7 @@ class Config:
     simple_program_name: str
 
     is_console_app: bool = False
+    create_desktop_shortcut: bool = True
     jvm_arguments: str = ""
     min_java_version: int = 17
     welcome_text: str = ""
@@ -42,12 +43,13 @@ def create_rust_config(config: Config, base_directory: str):
         config_template = f.read()
     
     with open(os.path.join(base_directory, RUST_CONFIG_OUT_FILE), 'w+') as f:
-        # Have to pass is_console_app separately as python auto bool-to-string
+        # Have to pass these bools separately as python auto bool-to-string
         # results in first letter capitalized, which breaks rust.
         # Because python doesn't support complex expressions in f-strings,
         # we therefore have to do the conversion here.
         f.write(config_template.format(config=config,
-            is_console_app=str(config.is_console_app).lower()))
+            is_console_app=str(config.is_console_app).lower(),
+            create_desktop_shortcut=str(config.create_desktop_shortcut).lower()))
 
 def build_installer(config: Config, base_directory: str, debug: bool = False, target: str = None ):
     os.chdir(base_directory)

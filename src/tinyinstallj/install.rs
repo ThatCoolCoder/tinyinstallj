@@ -106,7 +106,7 @@ pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), Strin
 }
 
 #[cfg(target_family = "unix")]
-pub fn create_app_link(install_paths: &InstallPaths) -> Result<(), String> {
+pub fn create_app_link(link_path: &PathBuf, install_paths: &InstallPaths) -> Result<(), String> {
     // With Rust 1.58 formatting can be done better & more easily,
     // but I want to support older versions
     let content = format!("
@@ -124,15 +124,15 @@ pub fn create_app_link(install_paths: &InstallPaths) -> Result<(), String> {
         full_program_name = config::FULL_PROGRAM_NAME,
         jvm_arguments = config::JVM_ARGUMENTS);
 
-    match std::fs::write(&install_paths.app_link, content) {
+    match std::fs::write(&link_path, content) {
         Ok(_v) => (),
-        Err(_e) => return Err(format!("Failed to write {}", &install_paths.app_link.to_string_lossy()))
+        Err(_e) => return Err(format!("Failed to write {}", &link_path.to_string_lossy()))
     };
     return Ok(());
 }
 
 #[cfg(target_family = "windows")]
-pub fn create_app_link(install_paths: &InstallPaths) -> Result<(), String> {
+pub fn create_app_link(link_path: &PathBuf, install_paths: &InstallPaths) -> Result<(), String> {
     // I tried to use the lnk crate to do this but it turned out to be simpler to just
     // bodge a powershell script as the crate doesn't support saving yet.
     let script = format!(r#"
@@ -142,7 +142,7 @@ pub fn create_app_link(install_paths: &InstallPaths) -> Result<(), String> {
         $Shortcut.Arguments = '-jar "{jar_location}"'
         $Shortcut.IconLocation = "{icon_location}" 
         $Shortcut.Save()"#,
-        shortcut_location = &install_paths.app_link.to_string_lossy(),
+        shortcut_location = &link_path.to_string_lossy(),
         icon_location = &install_paths.icon.to_string_lossy(),
         jar_location = &install_paths.jar.to_string_lossy()
     );

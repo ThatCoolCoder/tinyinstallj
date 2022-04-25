@@ -60,7 +60,6 @@ A JSON file containing information about your program. Some fields are optional.
 - Windows: Robustness if `C:\Windows\System32\WindowsPowershell\v1.0\powershell.exe` doesn't exist.
 - Windows: find how to update the PATH without rebooting, or at least only tell people that they need to reboot when PATH was changed (which only occurs on the first installation of a tinyinstallj program)
 - Option to add shortcut to desktop
-- Allow setting JVM flags
 - Windows: better uninstaller integration with desktop
 - Option overrrides in `tinyinstallj.json` for different platforms.
 - Proper support for OSX instead of just trying to use the Linux installer

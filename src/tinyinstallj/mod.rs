@@ -31,7 +31,7 @@ pub fn install(force_install: bool) {
     };
 
     // We do this before everything else in case it fails 
-    let install_paths = match get_install_paths::get_install_paths() {
+    let install_paths: InstallPaths = match get_install_paths::get_install_paths() {
         Some(v) => v,
         None => {
             on_failed_to_determine_path();
@@ -72,9 +72,12 @@ pub fn install(force_install: bool) {
     output_result("Creating runner script...", install::create_runner_script(&install_paths));
     output_result("Creating uninstaller...", install::create_uninstall_script(&install_paths));
     if ! config::IS_CONSOLE_APP {
-        output_result("Creating application shortcut...", install::create_app_link(&install_paths));
+        output_result("Creating application link...", install::create_app_link(&install_paths.app_link, &install_paths));
     }
     println!("");
+    if config::CREATE_DESKTOP_SHORTCUT && utils::ask_yn("Would you like to add a shortcut to the desktop?", true) {
+        output_result("Creating desktop shortcut...", install::create_app_link(&install_paths.desktop_link, &install_paths));
+    }
 
     println!("Installation complete.\n");
     if std::env::consts::OS == "windows" {
