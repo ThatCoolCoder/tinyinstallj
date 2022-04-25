@@ -38,12 +38,7 @@ Create a configuration file `tinyinstallj.json` in the root directory of your pr
 
 Then to generate an installer, run `python3 tinyinstallj/create_installer.py`. By default this builds an optimized production build. Call with the `-d` flag to build a debug build, which takes less time. The target platform for an installer will be the same as the one generating the installer; i.e if you use a Windows machine to generate an installer, you will get a Windows executable.
 
-Cross compilation is possible but somewhat challenging. First install your target platform using the instructions from [https://rust-lang.github.io/rustup/cross-compilation.html](https://rust-lang.github.io/rustup/cross-compilation.html). You'll need to have a C toolchain set up to compile to that platform too. If you manage to get that working then you can call `python tinyinstallj/create_installer.py -t <platform you just installed>`. Here's an example compiling from Arch Linux to Windows:
-```
-$ sudo pacman -S mingw-w64-gcc # (install MinGW, may need to install some other ming2-264 packages)
-$ rustup toolchain install x86_64-pc-windows-gnu
-$ python create_installer.py -t x86_64-pc-windows-gnu
-```
+Cross compilation is possible but not easy. First install your target platform using the instructions from [https://rust-lang.github.io/rustup/cross-compilation.html](https://rust-lang.github.io/rustup/cross-compilation.html). You'll need to have a C toolchain set up to compile to that platform too. If you manage to get that working then you can call `python tinyinstallj/create_installer.py -t <platform you just installed>`.
 
 #### tinyinstallj.json
 
