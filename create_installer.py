@@ -68,10 +68,15 @@ def build_installer(config: Config, base_directory: str, debug: bool = False, ta
         print('Failed building executable.')
         rust_diagnostics()
 
+    output_dir = 'target'
+    if target is not None:
+        output_dir = os.path.join(output_dir, target)
+        
     if debug:
-        output_dir = os.path.join('target', 'debug')
+        output_dir = os.path.join(output_dir, 'debug')
     else:
-        output_dir = os.path.join('target', 'release')
+        output_dir = os.path.join(output_dir, 'release')
+
     old_cwd = os.getcwd()
     os.chdir(output_dir)
 
