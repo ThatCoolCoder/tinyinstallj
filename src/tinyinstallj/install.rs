@@ -64,7 +64,7 @@ pub fn create_uninstall_script(install_paths: &InstallPaths) -> Result<(), Strin
                 echo "You must be root to run this script"
                 exit
             fi
-            read -p "Are you sure you want to run this uninstaller? " -n 1 -r
+            read -p "Are you sure you want to run this uninstaller? (y/N) " -n 1 -r
             echo ""
             if [[ ! $REPLY =~ ^[y]$ ]]
             then

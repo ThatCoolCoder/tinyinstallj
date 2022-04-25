@@ -74,7 +74,10 @@ def build_installer(config: Config, base_directory: str, debug: bool = False, ta
     os.chdir(output_dir)
 
     if os.path.exists('tinyinstallj'):
-        output_name = f'{config.simple_program_name}-installer'
+        # Linux executables of course don't need an extension but it's good to put one
+        # so that confused people can search it up and know what to do.
+        # This is especially important since launching an executable directly from a browser isn't allowed in many distros
+        output_name = f'{config.simple_program_name}-installer.x86_64'
         os.replace('tinyinstallj', output_name)
     elif os.path.exists('tinyinstallj.exe'):
         output_name = f'{config.simple_program_name}-installer.exe'

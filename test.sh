@@ -1,1 +1,1 @@
-python3 create_installer.py -d && sudo ./target/debug/tccweather-installer
+python3 create_installer.py -d && sudo ./target/debug/tccweather-installer.x86_64
