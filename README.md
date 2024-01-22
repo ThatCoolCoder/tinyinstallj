@@ -1,6 +1,6 @@
 # tinyinstallj
 
-A tiny installer generator for Java programs, primarily designed for use on GUI programs. It can work with command line programs but things might get a bit weird on some OS configurations (testing needed).
+A simple and tiny installer generator for Java programs, primarily designed for use on GUI programs. It can work with command line programs but things might get a bit weird on some OS configurations (testing needed).
 
 The installer generator is written in Python and it builds a statically linked standalone Rust executable that should run pretty much anywhere.
 
